@@ -30,11 +30,11 @@ def setup_java():
 
 
 # Call the setup function
-java_home = setup_java()
+# java_home = setup_java()
 
 # Display the JAVA_HOME and PATH for verification
-st.write(f"JAVA_HOME is set to: {java_home}")
-st.write(f"PATH is set to: {os.environ['PATH']}")
+# st.write(f"JAVA_HOME is set to: {java_home}")
+# st.write(f"PATH is set to: {os.environ['PATH']}")
 
 # Initialize Spark session with the configuration parameter
 spark = SparkSession.builder.appName("Ola")\
