@@ -2,6 +2,40 @@ import streamlit as st
 from pyspark.sql import SparkSession
 from pyspark.ml import PipelineModel
 from synapse.ml.lightgbm import LightGBMClassifier, LightGBMClassificationModel
+import tarfile
+import os
+
+
+@st.cache_resource
+def setup_java():
+    # Define the URL and the file paths
+    java_url = "http://download.oracle.com/otn-pub/java/jdk/11+28/55eed80b163941c8885ad9298e6d786a/jdk-11_linux-x64_bin.tar.gz"
+    java_tar_path = "jdk-11_linux-x64_bin.tar.gz"
+    java_extract_path = "/usr/local/java"
+
+    # Download the Java tar.gz file (assuming it's already downloaded)
+    # os.system(f"wget --no-check-certificate -c --header 'Cookie: oraclelicense=accept-securebackup-cookie' {java_url}")
+
+    # Extract the tar.gz file
+    if not os.path.exists(java_extract_path):
+        os.makedirs(java_extract_path)
+    with tarfile.open(java_tar_path, "r:gz") as tar:
+        tar.extractall(path=java_extract_path)
+
+    # Set JAVA_HOME and update PATH
+    java_home = os.path.join(java_extract_path, "jdk-11")
+    os.environ["JAVA_HOME"] = java_home
+    os.environ["PATH"] = f"{java_home}/bin:" + os.environ["PATH"]
+
+    return java_home
+
+
+# Call the setup function
+java_home = setup_java()
+
+# Display the JAVA_HOME and PATH for verification
+st.write(f"JAVA_HOME is set to: {java_home}")
+st.write(f"PATH is set to: {os.environ['PATH']}")
 
 # Initialize Spark session with the configuration parameter
 spark = SparkSession.builder.appName("Ola")\
