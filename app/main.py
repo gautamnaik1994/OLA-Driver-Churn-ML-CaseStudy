@@ -34,8 +34,8 @@ driver_data_intermediate = {
     'Grade': 1,
     'Quarterly_Rating': 2,
     'Tenure': 1900,
-    'Date_Of_Joining_month': 2,
-    'Date_Of_Joining_year': 2019,
+    # 'Date_Of_Joining_month': 2,
+    # 'Date_Of_Joining_year': 2019,
     'Is_Valuable_Driver': 1
 }
 
@@ -55,8 +55,8 @@ driver_data_default = {
     'Grade': 2,
     'Quarterly_Rating': 1,
     'Tenure': 398,
-    'Date_Of_Joining_month': 2,
-    'Date_Of_Joining_year': 2019,
+    # 'Date_Of_Joining_month': 2,
+    # 'Date_Of_Joining_year': 2019,
     'Is_Valuable_Driver': 1
 }
 
@@ -81,7 +81,7 @@ def process_data(state):
 # Streamlit app layout
 st.title("OLA Driver Churn Prediction")
 
-st.image("./images/ola-driver-churn.png", use_column_width=True)
+st.image("./images/ola-driver-churn.png", use_container_width=True)
 
 st.subheader("About", divider=True)
 
@@ -129,12 +129,12 @@ st.markdown("#####")
 
 # Employee Details
 st.subheader("Employee Details", divider=True)
-left, right = st.columns(2)
 
-state['Tenure'] = right.number_input("Tenure", value=state['Tenure'])
-date_of_joining = left.date_input(
-    "Date Of Joining", value=datetime(state['Date_Of_Joining_year'], state['Date_Of_Joining_month'], 1)
-)
+state['Tenure'] = st.number_input("Tenure", value=state['Tenure'])
+# date_of_joining = left.date_input(
+#     "Date Of Joining", value=datetime(state['Date_Of_Joining_year'], state['Date_Of_Joining_month'], 1)
+# )
+left, right = st.columns(2)
 state['Grade'] = left.radio(
     "Grade", options=[1, 2, 3, 4, 5], index=state['Grade'], horizontal=True)
 state['Joining_Designation'] = right.radio("Joining Designation", options=[
@@ -149,8 +149,8 @@ state['Education_Level'] = right.radio("Education Level", options=[
 state['Has_Rating_Increased'] = middle.radio("Has Rating Increased", options=[
                                              0, 1], index=state['Has_Rating_Increased'], horizontal=True)
 
-state['Date_Of_Joining_month'] = date_of_joining.month
-state['Date_Of_Joining_year'] = date_of_joining.year
+# state['Date_Of_Joining_month'] = date_of_joining.month
+# state['Date_Of_Joining_year'] = date_of_joining.year
 state['Gender'] = 0 if gender == "Male" else 1
 
 st.markdown("#####")
@@ -159,11 +159,8 @@ if st.button("Predict", use_container_width=True, type="primary"):
     st.markdown("#####")
     st.subheader("Prediction Result", divider=True)
 
-    churn_probability = result[1]*100
-    no_churn_probability = result[0]*100
-
     st.markdown(
-        f"**The probability of the driver churning is :red[{churn_probability}%] and :green[{no_churn_probability}%] of not churning**", unsafe_allow_html=True)
+        f"**The probability of the driver churning is :red[{result[1] * 100:.4f}%] and :green[{result[0] * 100:.4f}%] of not churning**", unsafe_allow_html=True)
 
     st.markdown("#### Model Interpretation")
     fig, ax = plt.subplots()
